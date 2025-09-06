@@ -18,18 +18,9 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-docker@v2
 
-      - name: Build and start test containers
+      - name: Build and run test container
         working-directory: ./BE
-        run: docker-compose -f docker-compose.test.yml up -d --build
-
-      - name: Wait for backend to be ready
-        run: |
-          echo "Waiting for backend to be ready..."
-          sleep 20  # Ajusta según tu tiempo de arranque del backend
-
-      - name: Run backend tests
-        working-directory: ./BE
-        run: docker-compose -f docker-compose.test.yml exec -T backend mvn test
+        run: docker-compose -f docker-compose.test.yml up --build tests_be
 
       - name: Tear down containers
         working-directory: ./BE
