@@ -29,15 +29,27 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 21
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Build and test backend
+      - name: Build backend test image
         working-directory: ./BE
-        run: mvn clean test
+        run: docker build -f Dockerfile.test -t ticket-backend-test .
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432 -U admin; do
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
+
+      - name: Run backend tests inside container
+        run: |
+          docker run --rm \
+            -e SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/tickets \
+            -e SPRING_DATASOURCE_USERNAME=admin \
+            -e SPRING_DATASOURCE_PASSWORD=admin123 \
+            ticket-backend-test
 
   frontend-lint:
     name: Frontend Lint
