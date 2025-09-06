@@ -1,0 +1,22 @@
+INSERT INTO tickets (title, description, priority, status, assignee, tags)
+VALUES
+    ('Ticket 1', 'Error en la interfaz de usuario al cargar el formulario.', 'LOW', 'OPEN', 'Alice', 'bug,frontend'),
+    ('Ticket 2', 'Optimizar la consulta a la base de datos del módulo de usuarios.', 'MEDIUM', 'IN_PROGRESS', 'Bob', 'backend'),
+    ('Ticket 3', 'Falla crítica en la API al procesar pagos.', 'HIGH', 'CLOSED', 'Charlie', 'urgent,api'),
+    ('Ticket 4', 'El botón de guardar no responde en la página principal.', 'LOW', 'OPEN', 'David', 'frontend'),
+    ('Ticket 5', 'Error al sincronizar datos con el servidor de base de datos.', 'MEDIUM', 'OPEN', 'Eve', 'backend,database'),
+    ('Ticket 6', 'La API devuelve 500 al enviar solicitudes de prueba.', 'HIGH', 'IN_PROGRESS', 'Alice', 'api'),
+    ('Ticket 7', 'Bug menor en el layout de la sección de reportes.', 'LOW', 'CLOSED', 'Bob', 'bug'),
+    ('Ticket 8', 'Actualizar estilos y mejorar accesibilidad de la UI.', 'MEDIUM', 'OPEN', 'Charlie', 'frontend,ui'),
+    ('Ticket 9', 'La lógica de backend no valida correctamente los permisos.', 'HIGH', 'IN_PROGRESS', 'David', 'backend'),
+    ('Ticket 10', 'Agregar documentación sobre los endpoints existentes.', 'LOW', 'OPEN', 'Eve', 'documentation'),
+    ('Ticket 11', 'Error en la API al crear usuarios con caracteres especiales.', 'MEDIUM', 'CLOSED', 'Alice', 'bug,api'),
+    ('Ticket 12', 'Implementar mecanismo urgente de logging para la API.', 'HIGH', 'OPEN', 'Bob', 'urgent'),
+    ('Ticket 13', 'La UI no muestra correctamente los mensajes de error.', 'LOW', 'IN_PROGRESS', 'Charlie', 'frontend'),
+    ('Ticket 14', 'Actualizar la conexión backend para soportar nuevos endpoints.', 'MEDIUM', 'OPEN', 'David', 'backend,api'),
+    ('Ticket 15', 'Falla crítica al generar reportes mensuales.', 'HIGH', 'CLOSED', 'Eve', 'urgent,bug'),
+    ('Ticket 16', 'Documentación de instalación desactualizada.', 'LOW', 'OPEN', 'Alice', 'documentation'),
+    ('Ticket 17', 'El frontend necesita mejorar la navegación por teclado.', 'MEDIUM', 'IN_PROGRESS', 'Bob', 'frontend'),
+    ('Ticket 18', 'Backend no registra correctamente los logs de errores.', 'HIGH', 'OPEN', 'Charlie', 'backend'),
+    ('Ticket 19', 'Problema de contraste y visibilidad en la UI.', 'LOW', 'CLOSED', 'David', 'ui'),
+    ('Ticket 20', 'La API devuelve datos incompletos al consultar clientes.', 'MEDIUM', 'OPEN', 'Eve', 'api');

@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: tickets
+    ports:
+      - "5432:5432"
+
+  tests_be:
+    build:
+      context: ./BE
+      dockerfile: Dockerfile.test
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: test
