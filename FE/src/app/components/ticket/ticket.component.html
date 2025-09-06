@@ -1,0 +1,194 @@
+<app-header />
+
+<div class="p-4">
+  <mat-card class="shadow-lg rounded-2xl">
+    <mat-card-header class="flex items-center justify-between">
+      <mat-card-title class="text-2xl font-bold">Tickets</mat-card-title>
+
+      <div class="ml-auto flex gap-2">
+        <button
+          (click)="showFilters = !showFilters"
+          class="px-4 py-2 text-white rounded shadow-md transition"
+          [ngClass]="{
+            'bg-blue-600 hover:bg-blue-700': !showFilters,
+            'bg-red-600 hover:bg-red-700': showFilters,
+          }"
+        >
+          {{ showFilters ? 'Cerrar Filtros' : 'Filtros' }}
+        </button>
+
+        <button
+          (click)="onCreate()"
+          class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 shadow-md transition"
+        >
+          Crear
+        </button>
+      </div>
+    </mat-card-header>
+
+    @if (showFilters) {
+      <div class="mb-4">
+        <app-ticket-filter (filtersChanged)="onFiltersChanged($event)"></app-ticket-filter>
+      </div>
+    }
+
+    <mat-card-content class="!mt-4">
+      @if (loading()) {
+        @for (item of skeletons; track item) {
+          <div
+            class="absolute inset-0 bg-white bg-opacity-70 flex flex-col p-4 space-y-3 animate-pulse z-10"
+          >
+            <div class="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+            <div class="h-4 bg-gray-200 rounded w-full"></div>
+            <div class="h-4 bg-gray-200 rounded w-5/6 mt-2"></div>
+          </div>
+        }
+      }
+
+      <div>
+        <table mat-table [dataSource]="tickets()" matSort class="mat-elevation-z8 w-full">
+          <ng-container matColumnDef="title">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="bg-gray-200 text-gray-700 font-semibold"
+            >
+              Título
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="bg-gray-200 text-gray-700 font-semibold"
+            >
+              Descripción
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="bg-gray-200 text-gray-700 font-semibold"
+            >
+              Prioridad
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span
+                class="px-2 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="{
+                  'bg-green-100 text-green-800': element.priority === 'LOW',
+                  'bg-yellow-100 text-yellow-800': element.priority === 'MEDIUM',
+                  'bg-red-100 text-red-800': element.priority === 'HIGH',
+                }"
+              >
+                {{
+                  element.priority === 'LOW'
+                    ? 'Baja'
+                    : element.priority === 'MEDIUM'
+                      ? 'Media'
+                      : 'Alta'
+                }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="bg-gray-200 text-gray-700 font-semibold"
+            >
+              Estado
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span
+                class="px-2 py-1 rounded-full text-xs font-semibold"
+                [ngClass]="{
+                  'bg-blue-100 text-blue-800': element.status === 'OPEN',
+                  'bg-green-100 text-green-800': element.status === 'IN_PROGRESS',
+                  'bg-gray-100 text-gray-800': element.status === 'CLOSED',
+                }"
+              >
+                {{
+                  element.status === 'OPEN'
+                    ? 'Abierto'
+                    : element.status === 'IN_PROGRESS'
+                      ? 'En progreso'
+                      : 'Cerrado'
+                }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="tags">
+            <th mat-header-cell *matHeaderCellDef class="bg-gray-200 text-gray-700 font-semibold">
+              Tags
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex flex-wrap gap-1">
+                @for (tag of element.tags?.split(','); track tag) {
+                  <span
+                    class="px-2 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800"
+                  >
+                    {{ tag }}
+                  </span>
+                }
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="bg-gray-200 text-gray-700 font-semibold">
+              Acciones
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex space-x-2">
+                <button mat-icon-button (click)="onSearch(element.id)" matTooltip="Buscar">
+                  <mat-icon class="!text-[#28a745]">search</mat-icon>
+                </button>
+
+                @if (element.status !== 'CLOSED') {
+                  <button mat-icon-button (click)="onUpdate(element)" matTooltip="Modificar">
+                    <mat-icon class="!text-[#ffc107]">edit</mat-icon>
+                  </button>
+                }
+
+                @if (_userStore.user()?.role === 'ADMIN') {
+                  <button mat-icon-button (click)="onDelete(element.id)" matTooltip="Eliminar">
+                    <mat-icon class="!text-[#dc3545]">delete</mat-icon>
+                  </button>
+                }
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <mat-paginator
+          [length]="totalElements"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[10, 15, 20]"
+          (page)="onPageChange($event)"
+        >
+        </mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<app-ticket-detail
+  [ticket]="selectedTicket"
+  [open]="detailOpen"
+  (closeModal)="detailOpen = false"
+></app-ticket-detail>

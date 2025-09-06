@@ -1,0 +1,78 @@
+<h2 mat-dialog-title>
+  {{ data.ticket ? 'Editar Ticket' : 'Crear Ticket' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="p-4 flex flex-col gap-4">
+    <mat-form-field appearance="fill">
+      <mat-label>Título</mat-label>
+      <input matInput formControlName="title" placeholder="Ingrese título" />
+      @if (form.get('title')?.hasError('required')) {
+        <mat-error>El título es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="description" placeholder="Ingrese descripción"></textarea>
+      @if (form.get('description')?.hasError('required')) {
+        <mat-error>La descripción es requerida</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Asignado a</mat-label>
+      <input matInput formControlName="assignee" placeholder="Ingrese usuario" />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Tags</mat-label>
+      <mat-chip-grid #chipList aria-label="Tags">
+        @for (tag of tags.controls; track tag.value) {
+          <mat-chip-row [removable]="true" (removed)="removeTag(tag.value)">
+            {{ tag.value }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+      </mat-chip-grid>
+      <input
+        placeholder="Presiona Enter para agregar"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="addTag($event)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Prioridad</mat-label>
+      <mat-select formControlName="priority">
+        @for (p of priorities; track p.label) {
+          <mat-option [value]="p.value">{{ p.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="status">
+        @for (s of statuses; track s.label) {
+          <mat-option [value]="s.value">{{ s.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button
+    mat-raised-button
+    (click)="onSave()"
+    [disabled]="form.invalid"
+    [ngClass]="{ 'btn-edit': data.ticket, 'btn-success': !data.ticket }"
+  >
+    {{ data.ticket ? 'Actualizar' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

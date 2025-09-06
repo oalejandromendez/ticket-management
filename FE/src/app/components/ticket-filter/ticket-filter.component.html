@@ -1,0 +1,39 @@
+<form [formGroup]="form" class="bg-white shadow-md p-6 rounded-lg w-full">
+  <h3 class="font-bold mb-6 text-lg">Filtros</h3>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="">Todos</mat-option>
+        <mat-option value="OPEN">Abierto</mat-option>
+        <mat-option value="IN_PROGRESS">En progreso</mat-option>
+        <mat-option value="CLOSED">Cerrado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Prioridad</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option value="">Todos</mat-option>
+        <mat-option value="LOW">Baja</mat-option>
+        <mat-option value="MEDIUM">Media</mat-option>
+        <mat-option value="HIGH">Alta</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Buscar</mat-label>
+      <input matInput placeholder="Título o descripción" formControlName="q" />
+    </mat-form-field>
+  </div>
+
+  <div class="flex justify-center gap-4 mt-6">
+    <button type="button" (click)="clearFilters()" mat-stroked-button color="warn" class="px-6">
+      Limpiar
+    </button>
+    <button type="button" (click)="applyFilters()" mat-flat-button color="primary" class="px-6">
+      Aplicar
+    </button>
+  </div>
+</form>

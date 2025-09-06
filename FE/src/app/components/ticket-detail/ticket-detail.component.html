@@ -1,0 +1,82 @@
+@if (open) {
+  <div class="fixed inset-0 flex items-center justify-center bg-[#2268a2] bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
+      <h2 class="text-2xl font-bold mb-4">{{ ticket?.title }}</h2>
+      <p class="mb-4 text-gray-700">{{ ticket?.description }}</p>
+
+      <div class="mb-2">
+        <label class="font-semibold text-sm text-gray-600">Prioridad:</label>
+        <span
+          class="ml-2 px-2 py-1 rounded-full text-xs font-semibold"
+          [ngClass]="{
+            'bg-green-100 text-green-800': ticket?.priority === 'LOW',
+            'bg-yellow-100 text-yellow-800': ticket?.priority === 'MEDIUM',
+            'bg-red-100 text-red-800': ticket?.priority === 'HIGH',
+          }"
+        >
+          {{
+            ticket?.priority === 'LOW' ? 'Baja' : ticket?.priority === 'MEDIUM' ? 'Media' : 'Alta'
+          }}
+        </span>
+      </div>
+
+      <div class="mb-2">
+        <label class="font-semibold text-sm text-gray-600">Estado:</label>
+        <span
+          class="ml-2 px-2 py-1 rounded-full text-xs font-semibold"
+          [ngClass]="{
+            'bg-blue-100 text-blue-800': ticket?.status === 'OPEN',
+            'bg-green-100 text-green-800': ticket?.status === 'IN_PROGRESS',
+            'bg-gray-100 text-gray-800': ticket?.status === 'CLOSED',
+          }"
+        >
+          {{
+            ticket?.status === 'OPEN'
+              ? 'Abierto'
+              : ticket?.status === 'IN_PROGRESS'
+                ? 'En progreso'
+                : 'Cerrado'
+          }}
+        </span>
+      </div>
+
+      <div class="mb-2">
+        <label class="font-semibold text-sm text-gray-600">Asignado a:</label>
+        <span class="ml-2 text-gray-800">{{ ticket?.assignee || 'Sin asignar' }}</span>
+      </div>
+
+      <div class="mb-2">
+        <label class="font-semibold text-sm text-gray-600">Tags:</label>
+        <div class="flex flex-wrap gap-2 mt-1">
+          @for (tag of ticket?.tags?.split(',') || []; track tag) {
+            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+              {{ tag.trim() }}
+            </span>
+          }
+          @if (!ticket?.tags) {
+            <span class="text-gray-500">Sin tags</span>
+          }
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label class="font-semibold text-sm text-gray-600">Fecha de creación:</label>
+        <span class="ml-2 text-gray-800">{{ ticket?.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+
+      <div class="mb-4">
+        <label class="font-semibold text-sm text-gray-600">Última modificación:</label>
+        <span class="ml-2 text-gray-800">{{ ticket?.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+
+      <div class="flex justify-end">
+        <button
+          (click)="onClose()"
+          class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition"
+        >
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+}

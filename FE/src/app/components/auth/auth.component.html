@@ -1,0 +1,38 @@
+<div class="auth-wrapper">
+  <div class="auth-content">
+    <div class="auth-bg">
+      <span class="r"></span>
+      <span class="r s"></span>
+      <span class="r s"></span>
+      <span class="r"></span>
+    </div>
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="form-height bg-white p-8 rounded-lg shadow-lg w-full max-w-sm"
+    >
+      <h2 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h2>
+
+      <mat-form-field appearance="fill" class="w-full mb-4">
+        <mat-label>Usuario</mat-label>
+        <input matInput formControlName="username" placeholder="Usuario" />
+        @if (form.get('username')?.hasError('required')) {
+          <mat-error> El usuario es requerido </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full mb-6">
+        <mat-label>Contraseña</mat-label>
+        <input matInput type="password" formControlName="password" placeholder="Contraseña" />
+        @if (form.get('password')?.hasError('required')) {
+          <mat-error> La contraseña es requerida </mat-error>
+        }
+        @if (form.get('password')?.hasError('minlength')) {
+          <mat-error> La contraseña debe tener mínimo 6 caracteres </mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button class="w-full btn-primary">Ingresar</button>
+    </form>
+  </div>
+</div>
